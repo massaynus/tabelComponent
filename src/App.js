@@ -11,8 +11,6 @@ function App() {
   const [newColumn, setNewColumn] = useState('')
   const [newRow, setNewRow] = useState('')
 
-  const [dataJson, setDataJson] = useState('')
-
   function addColumnHandler() {
     const newData = addColumn(data, newColumn)
     setData(newData)
@@ -74,8 +72,6 @@ function App() {
       </div>
 
       <div className='stackEl'>
-        <pre>{dataJson}</pre>
-        <br />
         <button onClick={submitHandler}>Submit data</button>
       </div>
 
