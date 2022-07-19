@@ -1,7 +1,8 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './App.css';
 import Table from './Components/Table';
-import { addColumn, generateDummyData, getColumns } from './Lib/Datalayer'
+import { addColumn, generateDummyData, getColumns, removeColumn } from './Lib/Datalayer'
 
 function App() {
   const [columns, setColumns] = useState(['Niveau'])
@@ -9,6 +10,8 @@ function App() {
 
   const [newColumn, setNewColumn] = useState('')
   const [newRow, setNewRow] = useState('')
+
+  const [dataJson, setDataJson] = useState('')
 
   function addColumnHandler() {
     const newData = addColumn(data, newColumn)
@@ -24,6 +27,30 @@ function App() {
 
     setData(d => [...d, newDatum])
     setNewColumn('')
+  }
+
+  async function submitHandler() {
+    // API CALL
+    const res = await axios.post('http://localhost:5000/data', data)
+    alert(`server responded with status ${res.status}`)
+    console.log('server data: ', res.data)
+    const newData = res.data
+    setColumns(getColumns(newData))
+    setData(newData)
+  }
+
+  function DeleteRowHandler(idx) {
+    setData(d => {
+      const target = d[idx]
+      return d.filter(i => i !== target)
+    })
+  }
+
+  function DeleteColumnHandler(column) {
+    console.log('DELETE COLUMN:', column)
+    const dataCopy = removeColumn(data, column)
+    setColumns(getColumns(dataCopy))
+    setData(dataCopy)
   }
 
   useEffect(() => {
@@ -46,7 +73,13 @@ function App() {
         <button onClick={addRowHandler}>Add Row</button>
       </div>
 
-      <Table data={{ columns: columns, rows: data }} />
+      <div className='stackEl'>
+        <pre>{dataJson}</pre>
+        <br />
+        <button onClick={submitHandler}>Submit data</button>
+      </div>
+
+      <Table data={{ columns: columns, rows: data }} onDeleteRow={DeleteRowHandler} onDeleteColumn={DeleteColumnHandler} />
     </div>
   );
 }

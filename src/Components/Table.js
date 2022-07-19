@@ -1,6 +1,6 @@
 import TableCell from "./TableCell";
 
-function Table({ data }) {
+function Table({ data, onDeleteRow, onDeleteColumn }) {
 
     const { columns, rows } = data
 
@@ -8,7 +8,9 @@ function Table({ data }) {
         <table>
             <thead>
                 <tr>
-                    {columns.map(col => <th key={`tableHeader-${col}`}>{col}</th>)}
+                    {columns.map(col => <th key={`tableHeader-${col}`}>
+                        {col} {col !== 'Niveau' && <button onClick={() => onDeleteColumn(col)}>X</button>}
+                    </th>)}
                 </tr>
             </thead>
             <tbody>
@@ -18,6 +20,9 @@ function Table({ data }) {
                             {
                                 columns.map(col => <TableCell row={row} col={col} key={`${rowIndex}-${col}`} />)
                             }
+                            <td>
+                                <button onClick={() => onDeleteRow(rowIndex)}>Delete</button>
+                            </td>
                         </tr>
                     })
                 }

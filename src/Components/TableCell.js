@@ -23,8 +23,12 @@ function TableCell({ col, row }) {
     }
 
     function keyPressHandler(e) {
+        console.log(e.key)
         if (e.key === 'Enter') {
             row[col] = newValue
+            setDatum(newValue)
+            setNewValue('')
+        } else if (e.key === 'Escape') {
             setDatum(newValue)
             setNewValue('')
         }

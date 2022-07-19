@@ -2,23 +2,18 @@ export function generateNumber(max) {
     return Math.floor(Math.random() * max * 100) / 100
 }
 
-export function generateDummyData(count = 5) {
+export function generateDummyData(count = 4) {
     const arr = []
+    const levels = ['Mel', 'Mel', 'DSP1', 'C5 inf']
 
     while (count--) {
         const datum = {
-            'Niveau': 'DSP1',
-            'BPL': generateNumber(100),
-            'MgO': generateNumber(5),
-            'MO': generateNumber(5),
-            'SiO2': generateNumber(50),
-            'CO2': generateNumber(20),
-        }
-
-        datum['%'] = async () => {
-            console.log('processing: ', JSON.stringify(datum, null, 2))
-            await new Promise(res => setTimeout(res, 2000))
-            return generateNumber(100)
+            'Niveau': levels.shift(),
+            'BPL': null,
+            'MgO': null,
+            'MO': null,
+            'SiO2': null,
+            'CO2': null,
         }
 
         arr.push(datum)
@@ -29,11 +24,21 @@ export function generateDummyData(count = 5) {
 
 export function addColumn(data, newColumn) {
     for (const row of data) {
-        console.log(row)
         row[newColumn] = null
     }
 
     return data
+}
+
+export function removeColumn(data, column) {
+    const newData = []
+    for (const row of data) {
+        const newRow = { ...row }
+        delete newRow[column]
+        newData.push(newRow)
+    }
+
+    return newData
 }
 
 export function getColumns(data) {
